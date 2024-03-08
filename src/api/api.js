@@ -23,14 +23,16 @@ app.post('/login',async (req,res)=>{
     const body = await req.body;
     const client = await MongoClient.connect(uri);
     const data = await client.db('users').collection('register').find({"email":body.email}).toArray();
-    if(data){
+    if(data[0]){
         if(data[0].password == body.password){
-            res.send("login successful")
+            res.sendStatus(200);
         }else{
-            res.send('login denied')
+            res.sendStatus(401);
+            console.log('wrong password')
         }
     }else{
         res.sendStatus(401);
+        console.log("email dosn't exist")
     }
 })
 

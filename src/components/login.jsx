@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from 'react-router';
 
 export const Login = () => {
 
@@ -9,15 +10,21 @@ export const Login = () => {
     email:'',
     password:''
   }
-
+  const navigate = useNavigate();
+  const [error,setError] = useState(false);
   const uri = 'http://localhost:4002';
 
-  async function sendData(e){
-    // await axios.post(`${uri}/login`,{
-    //     "username":username,
-    //     "password":password
-    // })
-    // alert('datasent');
+  async function sendData(values){
+    try {
+      await axios.post(`${uri}/login`,{
+        "email":values.email,
+        "password":values.password
+    });
+    navigate('/');
+    } catch (error) {
+      console.log("login denied from react");
+      setError(true);
+    }
   }
 
   const LoginSchema = yup.object().shape({
@@ -45,6 +52,7 @@ export const Login = () => {
                    name="email"
                    className="text-black bg-gray-200 p-2 rounded-lg"/>
                   <ErrorMessage name="email" component="span" className='text-red-500'/> 
+                  
                 </div>
 
                 <div className="flex flex-col my-4">
@@ -54,6 +62,7 @@ export const Login = () => {
                    name="password"
                    className="text-black bg-gray-200 p-2 rounded-lg"/>
                   <ErrorMessage name="password" component="span" className='text-red-500'/> 
+                  {error?<p className='text-red-500'>Invalid Email or Password</p>:''}
                 </div>
 
               <div className='flex'>
