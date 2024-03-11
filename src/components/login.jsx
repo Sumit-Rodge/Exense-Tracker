@@ -19,6 +19,8 @@ export const Login = () => {
       await axios.post(`${uri}/login`,{
         "email":values.email,
         "password":values.password
+    },{
+      withCredentials:true
     });
     navigate('/');
     } catch (error) {
