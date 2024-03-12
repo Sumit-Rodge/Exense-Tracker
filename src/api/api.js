@@ -58,7 +58,7 @@ app.post('/login',async (req,res)=>{
 })
 
 
-// register post
+// register POST
 app.post('/register',async (req,res)=>{
     const salt  = await bcrypt.genSalt(10);
     const body = await req.body;
@@ -88,12 +88,13 @@ app.post('/register',async (req,res)=>{
 
 })
 
+// get user info GET
 app.get('/user/:id',async (req,res)=>{
     try {
         const id = req.params.id;
         const decode = jwt.verify(id,process.env.SECRET_KEY);
         const client = await MongoClient.connect(uri);
-        const data = await client.db('users').collection('users').find(new ObjectId(decode._id)).toArray();
+        const data = await client.db('users').collection('expenses').find({"id":new ObjectId(decode._id)}).toArray();
         res.status(200);
         res.send(data);
     } catch (error) {
@@ -102,12 +103,11 @@ app.get('/user/:id',async (req,res)=>{
     }
 })
 
-// add expess route
+// add expense PUT
 app.put('/addexpense/:id',async (req,res)=>{
     try {
         const id = req.params.id;
         const decode = jwt.verify(id,process.env.SECRET_KEY);
-        console.log(decode)
         const body = req.body;
         const client = await MongoClient.connect(uri);
         const expenseObj = {
@@ -118,10 +118,7 @@ app.put('/addexpense/:id',async (req,res)=>{
             "createdAt":new Date(Date.now()),
             "updatedAt":new Date(Date.now())
         };
-        console.log(expenseObj)
-        console.log(decode._id)
         const data = await client.db('users').collection('expenses').updateOne({"id":new ObjectId(decode._id)},{$push:{"expenses":expenseObj}})
-        console.log(data)
         res.sendStatus(200);
         
     } catch (error) {
@@ -131,6 +128,26 @@ app.put('/addexpense/:id',async (req,res)=>{
     
 })
 
+// delete expense PUT
+app.put('/deleteexpense',async (req,res)=>{
+    try {
+        const id = req.body.encryptedCookieValue;
+        const taskid = req.body.taskid;
+        const decode = jwt.verify(id,process.env.SECRET_KEY);
+        console.log(decode)
+        console.log(taskid)
+        console.log(req.body)
+        const client = await MongoClient.connect(uri);
+
+        await client.db('users').collection('expenses').updateOne({"id":new ObjectId(decode._id)},{$pull:{"expenses":{"id":taskid}}})
+        res.sendStatus(200);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(401);
+    }
+    
+})
 app.listen(PORT,()=>{
     console.log(`server started at : http://localhost:${PORT}`);
     
