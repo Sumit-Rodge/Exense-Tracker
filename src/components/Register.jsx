@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 export const Register = () => {
@@ -60,7 +61,7 @@ export const Register = () => {
       {(formik) => {
         const { isValid, dirty } = formik;
         return (
-          <div className="w-96">
+          <div className="w-1/4 text-sm">
             <h1 className='text-3xl font-mono text-center'>Register</h1>
             <Form>
 
@@ -70,7 +71,7 @@ export const Register = () => {
                 <Field
                     type="text" 
                     name="firstname" 
-                    class="text-black bg-gray-200 p-2 rounded-lg ">
+                    className="text-black bg-gray-200 p-2 rounded-lg font-mono">
                 </Field>
                 <ErrorMessage name="firstname" component="span" className="text-red-500"/>
               </div>    
@@ -81,7 +82,7 @@ export const Register = () => {
                 <Field
                  type="text"
                  name="lastname"
-                 className="p-2 text-black bg-gray-200 rounded-lg">
+                 className="p-2 text-black bg-gray-200 rounded-lg font-mono">
                 </Field>
                 <ErrorMessage name="lastname" component="span" className='text-red-500'/>
               </div>
@@ -92,7 +93,7 @@ export const Register = () => {
                 <Field
                  type="text"
                  name="username"
-                 className="p-2 text-black bg-gray-200 rounded-lg"
+                 className="p-2 text-black bg-gray-200 rounded-lg font-mono"
                 ></Field> 
                 <ErrorMessage name="username" component="span" className="text-red-500"/>
              </div>
@@ -104,7 +105,7 @@ export const Register = () => {
                   type="email"
                   name="email"
                   id="email"
-                  className="text-black bg-gray-200 p-2 rounded-lg"
+                  className="text-black bg-gray-200 p-2 rounded-lg font-mono"
                 />
                 <ErrorMessage name="email" component="span" className="text-red-500" />
                 {
@@ -119,7 +120,7 @@ export const Register = () => {
                   type="password"
                   name="password"
                   id="password"
-                  className="text-black bg-gray-200 p-2 rounded-lg  "
+                  className="text-black bg-gray-200 p-2 rounded-lg  font-mono"
                 />
                 <ErrorMessage
                   name="password"
@@ -128,7 +129,8 @@ export const Register = () => {
                 />
               </div>
             
-            <div className='flex'>
+            <Link to='/login' className='text-green-700 text-lg hover:text-blue-50'>Already have an account?</Link>
+            <div className='flex my-4'>
               <button
                 type="submit"
                 className={(isValid)?"bg-blue-600 px-6 py-3 mx-auto rounded-lg":'bg-red-600 px-6 py-3 mx-auto rounded-lg'}

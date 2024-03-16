@@ -1,10 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios';
 import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+import { CookieContext } from '../context/cookieContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Login = () => {
+
+  const [encryptedCookieValue,setEncryptedCookieValue] = useContext(CookieContext);
+
+  function setCookie(){
+    setEncryptedCookieValue(document.cookie.split('=')[1]);
+  }
 
   const initialValues = {
     email:'',
@@ -22,6 +32,8 @@ export const Login = () => {
     },{
       withCredentials:true
     });
+    setCookie();
+    showLoginSuccess();
     navigate('/');
     } catch (error) {
       console.log("login denied from react");
@@ -33,8 +45,15 @@ export const Login = () => {
     email:yup.string().required().email(),
     password:yup.string().required().min('4')
   })
+
+  const showLoginSuccess = () => {
+    toast.success("Logged In !",{
+      position:"bottom-center"
+    });
+  };
   return (
     <div className='bg-gray-900 h-screen w-full flex justify-center text-white items-center '>
+      <ToastContainer/>
        <Formik
         initialValues={initialValues}
         validationSchema={LoginSchema}
@@ -43,7 +62,7 @@ export const Login = () => {
         {(formik)=>{
           const {isValid , dirty} = formik;
           return (
-            <div className='w-96'>
+            <div className='w-1/4 text-sm'>
               <h1 className='text-3xl font-mono text-center'>Login</h1>
               <Form>
 
@@ -52,7 +71,7 @@ export const Login = () => {
                   <Field
                    type="email"
                    name="email"
-                   className="text-black bg-gray-200 p-2 rounded-lg"/>
+                   className="text-black bg-gray-200 p-2 rounded-lg font-mono"/>
                   <ErrorMessage name="email" component="span" className='text-red-500'/> 
                   
                 </div>
@@ -62,12 +81,13 @@ export const Login = () => {
                   <Field
                    type="password"
                    name="password"
-                   className="text-black bg-gray-200 p-2 rounded-lg"/>
+                   className="text-black bg-gray-200 p-2 rounded-lg font-mono"/>
                   <ErrorMessage name="password" component="span" className='text-red-500'/> 
                   {error?<p className='text-red-500'>Invalid Email or Password</p>:''}
                 </div>
 
-              <div className='flex'>
+              <Link to='/register' className='text-green-700 hover:text-blue-50'>Don't have an account?</Link>
+              <div className='flex my-4'>
                 <button
                   type="submit"
                   className={(isValid)?"bg-blue-600 px-6 py-3 mx-auto rounded-lg":'bg-red-600 px-6 py-3 mx-auto rounded-lg'}
@@ -77,6 +97,8 @@ export const Login = () => {
                 </button>
               </div>
               </Form>
+
+              
             </div>
           )
         }}

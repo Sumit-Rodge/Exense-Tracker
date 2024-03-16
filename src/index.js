@@ -2,23 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { Login } from './components/login';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Register } from './components/Register';
-import { Home } from './components/Home';
-import { Header } from './components/Header';
+import { Index } from './components/Index';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-    <Header/>
-      <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/register'element={<Register/>} />
-      </Routes>
-    </BrowserRouter>
+    <Index/>
   </React.StrictMode>
 );
 
